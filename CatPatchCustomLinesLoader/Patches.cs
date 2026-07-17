@@ -22,7 +22,7 @@ internal class Patches
 					new CodeMatch(OpCodes.Call,
 						AccessTools.Method(typeof(CatPatchHostSettingsMenu),
 							nameof(CatPatchHostSettingsMenu.DrawUpdaterControls))))
-				.ThrowIfInvalid("CatPatchCustomLinesLoader could not find a match!");
+				.ThrowIfInvalid("DrawWindowContentsTranspiler could not find a match!");
 			
 			// Move the branch label from the current instruction to a new Nop one step back, to make room for my code
 			var labels = codeMatcher.Labels;
@@ -54,33 +54,85 @@ internal class Patches
 			__result = DialogueManager.ChooseHugLine(speakerBody, receiverBody);
 			return false;
 		}
+	}
 
-		[HarmonyPatch(nameof(TalkerCatPatch.PlayHugAcceptedLine))]
-		[HarmonyPrefix]
-		private static void PlayHugAcceptedLinePatch(knetid speakerClientId, ref string line)
+	[HarmonyPatch(typeof(HugNetworkController))]
+	internal static class HugNetworkControllerPatch
+	{
+		[HarmonyPatch(nameof(HugNetworkController.ReceiveStartLocal))]
+		[HarmonyTranspiler]
+		private static IEnumerable<CodeInstruction> ReceiveStartLocalTranspiler(IEnumerable<CodeInstruction> instructions)
 		{
-			if (!Plugin.ShouldFilterIncomingLines)
-				line = DialogueManager.ReplaceHugLine(speakerClientId, line);
+			return new CodeMatcher(instructions).MatchForward(false,
+					new CodeMatch(OpCodes.Ldarg_0),
+					new CodeMatch(OpCodes.Ldfld, 
+						AccessTools.Field(typeof(HugNetworkController), nameof(HugNetworkController._talkerCatPatch))),
+					new CodeMatch(OpCodes.Ldarg_1),
+					new CodeMatch(OpCodes.Ldarg_S, (byte)4),
+					new CodeMatch(OpCodes.Callvirt,
+						AccessTools.Method(typeof(TalkerCatPatch),
+							nameof(TalkerCatPatch.PlayHugAcceptedLine))))
+				.ThrowIfInvalid("HugNetworkControllerPatch.ReceiveStartLocalTranspiler could not find a match!")
+				.RemoveInstructions(5)
+				.Insert(new CodeInstruction(OpCodes.Ldarg_1),
+					new CodeInstruction(OpCodes.Ldarg_2),
+					new CodeInstruction(OpCodes.Ldarg_S, (byte)4),
+					new CodeInstruction(OpCodes.Call,
+						AccessTools.Method(typeof(DialogueManager), nameof(DialogueManager.PlayHugLine))))
+				.InstructionEnumeration();
 		}
 	}
 
-	[HarmonyPatch(typeof(KissDialogue))]
-	internal static class KissDialoguePatch
+	[HarmonyPatch(typeof(KissNetworkController))]
+	internal static class KissNetworkControllerPatch
 	{
-		[HarmonyPatch(nameof(KissDialogue.ChooseLine))]
-		[HarmonyPrefix]
-		private static bool ChooseLinePatch(ref string __result)
+		[HarmonyPatch(nameof(KissNetworkController.StartKissOnServer))]
+		[HarmonyTranspiler]
+		private static IEnumerable<CodeInstruction> StartKissOnServerTranspiler(IEnumerable<CodeInstruction> instructions)
 		{
-			__result = DialogueManager.ChooseKissLine();
-			return false;
+			var codeMatcher = new CodeMatcher(instructions).MatchForward(false,
+					new CodeMatch(OpCodes.Ldarg_0),
+					new CodeMatch(OpCodes.Ldfld,
+						AccessTools.Field(typeof(KissNetworkController), nameof(KissNetworkController._dialogue))),
+					new CodeMatch(OpCodes.Callvirt,
+						AccessTools.Method(typeof(KissDialogue), nameof(KissDialogue.ChooseLine))))
+				.ThrowIfInvalid("KissNetworkControllerPatch.StartKissOnServer could not find a match!");
+			
+			var labels = codeMatcher.Labels;
+			return codeMatcher
+				.Insert(new CodeInstruction(OpCodes.Nop))
+				.AddLabels(labels)
+				.Advance(1)
+				.RemoveInstructions(3)
+				.Insert(new CodeInstruction(OpCodes.Ldarg_1),
+					new CodeInstruction(OpCodes.Ldarg_2),
+					new CodeInstruction(OpCodes.Call,
+						AccessTools.Method(typeof(DialogueManager), nameof(DialogueManager.ChooseKissLine))))
+				.InstructionEnumeration();
 		}
 		
-		[HarmonyPatch(nameof(KissDialogue.PlayLine))]
-		[HarmonyPrefix]
-		private static void PlayLinePatch(ref string line)
+		[HarmonyPatch(nameof(KissNetworkController.ReceiveStartLocal))]
+		[HarmonyTranspiler]
+		private static IEnumerable<CodeInstruction> ReceiveStartLocalTranspiler(IEnumerable<CodeInstruction> instructions)
 		{
-			if (!Plugin.ShouldFilterIncomingLines)
-				line = DialogueManager.ReplaceKissLine(line);
+			return new CodeMatcher(instructions).MatchForward(false,
+					new CodeMatch(OpCodes.Ldarg_0),
+					new CodeMatch(OpCodes.Ldfld, 
+						AccessTools.Field(typeof(KissNetworkController), nameof(KissNetworkController._dialogue))),
+					new CodeMatch(OpCodes.Ldarg_1),
+					new CodeMatch(OpCodes.Ldarg_S, (byte)4),
+					new CodeMatch(OpCodes.Ldc_R4, 1.0f),
+					new CodeMatch(OpCodes.Callvirt,
+						AccessTools.Method(typeof(KissDialogue),
+							nameof(KissDialogue.PlayLineDelayed))))
+				.ThrowIfInvalid("KissNetworkControllerPatch.ReceiveStartLocalTranspiler could not find a match!")
+				.RemoveInstructions(6)
+				.Insert(new CodeInstruction(OpCodes.Ldarg_1),
+					new CodeInstruction(OpCodes.Ldarg_2),
+					new CodeInstruction(OpCodes.Ldarg_S, (byte)4),
+					new CodeInstruction(OpCodes.Call,
+						AccessTools.Method(typeof(DialogueManager), nameof(DialogueManager.PlayKissLine))))
+				.InstructionEnumeration();
 		}
 	}
 }
