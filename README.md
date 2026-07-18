@@ -13,26 +13,17 @@ To install:
 
 ---
 
-Note: **The dialogue lines are decided by the host!**
+### Usage
 
-In lobbies, the host's CatPatchCustomLines.json will override your own.
-If the host doesn't have this mod installed, then the default CatPatch lines will be used for everyone.
+For Hosts, this mod allows them to set up custom dialogue for everyone on the server to see, even if they don't have this mod installed. Simply add or remove any dialogue you want in CatPatchCustomLines.json
 
-On the bright side, if a host has this mod but a client doesn't, then the client will still see the custom dialogue, since the server sends the line to all clients.
+For Clients, they can filter unwanted dialogue by enabling 'Filter Incoming Lines' in CatPatch's in-game settings. Any dialogue lines not present in your CatPatchCustomLines.json will be replaced by lines you do have. This setting is disabled by default.
 
-Nevertheless, this mod allows you to filter host's lines via the "filterIncomingLines" setting.
-Any incoming dialogue lines not present in your CatPatchCustomLines.json will be replaced by lines you do have.
-
-So, if all you want is to remove some of the 'meme' lines from CatPatch, simply remove those lines from CatPatchCustomLines.json and enable the "filterIncomingLines" setting.
-You can set this option in-game from CatPatch's settings menu (click the small square button at the bottom).
-
-In short: Hosts can set the custom dialogue, Clients can filter unwanted lines.
-
-#### Doesn't CatPatch already allow you to set custom dialogue through translations?
+### Doesn't CatPatch already allow you to set custom dialogue through translations?
 
 Yes, but that's annoying to set up.
 
-#### Extra dialogue pools
+### Extra dialogue pools
 
 Besides the default Vulnerable/Comfort/Cheerful cases, the mod also adds extra dialogue pools for use in specific condidtions.
 Adding dialogue lines for all these cases is _not_ necessary. If they're empty, that case will simply be skipped.
