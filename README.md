@@ -20,7 +20,7 @@ For Clients, they can filter unwanted dialogue by enabling 'Filter Incoming Line
 
 #### Extra dialogue pools
 
-Besides the default Vulnerable/Comfort/Cheerful cases, the mod also adds extra dialogue pools for use in specific condidtions.
+Besides the default Vulnerable/Comfort/Cheerful cases, the mod also adds extra dialogue pools for use in specific conditions.
 Adding dialogue lines for all these cases is _not_ necessary. If they're empty, that case will simply be skipped.
 
 I've ordered them here in descending priority. Speaker is the player who initiated the hug and Receiver whoever accepted the hug.
