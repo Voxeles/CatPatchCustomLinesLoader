@@ -3,7 +3,7 @@
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>$(ProjectName)</AssemblyName>
     <Product>CatPatchCustomLinesLoader</Product>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RestoreAdditionalProjectSources>
@@ -63,35 +63,23 @@
   </ItemGroup>
 
   <PropertyGroup>
-  <RequiredFilesToCopy>
-  $(ProjectName).dll;
-  $(ProjectName).pdb
-  </RequiredFilesToCopy>
-
-
-  <RequiredFoldersToCopy>  
-  </RequiredFoldersToCopy>
+    <RequiredFilesToCopy>$(ProjectName).dll;$(ProjectName).pdb</RequiredFilesToCopy>
+    <RequiredFoldersToCopy></RequiredFoldersToCopy>
   </PropertyGroup>
 
   <Target Name="CopyOutputDllsToPluginsFolder" AfterTargets="AfterBuild" Condition="'$(RequiredFilesToCopy)'!=''">
     <MakeDir Directories="$(BepInExDir)/plugins/$(ProjectName)" />
-  <CombinePath BasePath="$(OutDir)" Paths="$(RequiredFilesToCopy)">
-    <Output TaskParameter="CombinedPaths" ItemName="RequiredFilesToCopy_Combined" />
-  </CombinePath>
-  <Copy
-    SourceFiles="@(RequiredFilesToCopy_Combined)"
-      DestinationFolder="$(BepInExDir)/plugins/$(ProjectName)"
-  />
-</Target>
+    <CombinePath BasePath="$(OutDir)" Paths="$(RequiredFilesToCopy)">
+      <Output TaskParameter="CombinedPaths" ItemName="RequiredFilesToCopy_Combined" />
+    </CombinePath>
+    <Copy SourceFiles="@(RequiredFilesToCopy_Combined)" DestinationFolder="$(BepInExDir)/plugins/$(ProjectName)"/>
+  </Target>
 
   <Target Name="CopyFoldersToPluginsFolder" AfterTargets="AfterBuild" Condition="'$(RequiredFoldersToCopy)'!=''">
-  <ItemGroup>
-    <RequiredFolders Include="$(RequiredFoldersToCopy.Split(';'))" />
-    <FilesToCopy Include="%(RequiredFolders.Identity)/**/*" />
-  </ItemGroup>
-  <Copy
-    SourceFiles="@(FilesToCopy)"
-      DestinationFiles="@(FilesToCopy->'$(BepInExDir)/plugins/$(ProjectName)/%(Identity)')"
-  />
+    <ItemGroup>
+      <RequiredFolders Include="$(RequiredFoldersToCopy.Split(';'))" />
+      <FilesToCopy Include="%(RequiredFolders.Identity)/**/*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(FilesToCopy)" DestinationFiles="@(FilesToCopy->'$(BepInExDir)/plugins/$(ProjectName)/%(Identity)')"/>
 </Target>
 </Project>

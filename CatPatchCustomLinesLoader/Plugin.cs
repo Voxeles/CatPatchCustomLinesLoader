@@ -11,7 +11,7 @@ public class Plugin : BaseUnityPlugin
 {
 	public const string ModGUID = "meowharder.catpatch.customlinesloader";
 	public const string ModName = "CatPatchCustomLinesLoader";
-	public const string ModVersion = "0.1.0";
+	public const string ModVersion = "0.2.0";
 	
 	public static Plugin Instance { get; private set; } = null!;
 
