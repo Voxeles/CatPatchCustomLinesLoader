@@ -1,4 +1,4 @@
-### A super simple mod for CatPatch to allow loading custom dialogue lines
+### An unofficial mod for CatPatch to allow loading custom dialogue lines
 
 CatPatch: https://www.nexusmods.com/scavprototype/mods/69
 
