@@ -1,4 +1,6 @@
-### An unofficial mod for CatPatch to allow loading custom dialogue lines
+# An unofficial mod for CatPatch to allow loading custom dialogue lines
+
+![Banner](assets/banner.png)
 
 CatPatch: https://www.nexusmods.com/scavprototype/mods/69
 
@@ -6,19 +8,19 @@ Allows you to replace the default hugging/kissing lines in CatPatch with your ow
 Simply edit the CatPatchCustomLines.json file to add new lines or remove existing ones.
 The file is hot reloaded, no need to restart the game.
 
-#### Installation
+# Installation
 
 1. Download CatPatchCustomLinesLoader.zip from [Releases](https://github.com/Voxeles/CatPatchCustomLinesLoader/releases)
 2. Unzip it and place the extracted CatPatchCustomLinesLoader folder in "Casualties Unknown Demo/BepInEx/plugins"
 3. Edit the CatPatchCustomLinesLoader/CatPatchCustomLines.json file as you wish. By default it comes with all of CatPatch's base dialogue.
 
-#### Usage
+# Usage
 
 For Hosts, this mod allows them to set up custom dialogue for everyone on the server to see, even if they don't have this mod installed. Simply add or remove any dialogue you want in CatPatchCustomLines.json
 
 For Clients, they can filter unwanted dialogue by enabling 'Filter Incoming Lines' in CatPatch's in-game settings. Any dialogue lines not present in your CatPatchCustomLines.json will be replaced by lines you do have. This setting is disabled by default.
 
-#### Extra dialogue pools
+# Extra dialogue pools
 
 Besides the default Vulnerable/Comfort/Cheerful cases, the mod also adds extra dialogue pools for use in specific conditions.
 Adding dialogue lines for all these cases is _not_ necessary. If they're empty, that case will simply be skipped.
