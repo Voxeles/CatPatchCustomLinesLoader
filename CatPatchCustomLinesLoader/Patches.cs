@@ -5,7 +5,7 @@ using CatPatchspace;
 
 namespace CatPatchCustomLinesLoader;
 
-internal class Patches
+internal static class Patches
 {
 	[HarmonyPatch(typeof(CatPatchHostSettingsMenu))]
 	internal static class CatPatchHostSettingsMenuPatch
@@ -14,21 +14,12 @@ internal class Patches
 		[HarmonyTranspiler]
 		private static IEnumerable<CodeInstruction> DrawWindowContentsTranspiler(IEnumerable<CodeInstruction> instructions)
 		{
-			var codeMatcher = new CodeMatcher(instructions);
-			codeMatcher.MatchForward(false,
-					new CodeMatch(OpCodes.Ldloc_0),
-					new CodeMatch(OpCodes.Ldloc_1),
+			return new CodeMatcher(instructions)
+				.MatchForward(false,
 					new CodeMatch(OpCodes.Call,
-						AccessTools.Method(typeof(CatPatchHostSettingsMenu),
-							nameof(CatPatchHostSettingsMenu.DrawUpdaterControls))))
-				.ThrowIfInvalid("DrawWindowContentsTranspiler could not find a match!");
-			
-			// Move the branch label from the current instruction to a new Nop one step back, to make room for my code
-			var labels = codeMatcher.Labels;
-			codeMatcher
-				.Insert(new CodeInstruction(OpCodes.Nop))
-				.AddLabels(labels)
-				.Advance(1)
+						AccessTools.PropertyGetter(typeof(CatPatchClientSettings),
+							nameof(CatPatchClientSettings.ShowSprays))))
+				.ThrowIfInvalid("DrawWindowContentsTranspiler could not find a match!")
 				.InsertAndAdvance(
 					new CodeInstruction(OpCodes.Ldstr, "Filter Incoming Lines"),
 					new CodeInstruction(OpCodes.Call,
@@ -38,8 +29,8 @@ internal class Patches
 						AccessTools.Method(typeof(CatPatchHostSettingsMenu), nameof(CatPatchHostSettingsMenu.DrawToggleRow))),
 					new CodeInstruction(OpCodes.Call,
 						AccessTools.PropertySetter(typeof(Plugin), nameof(Plugin.ShouldFilterIncomingLines)))
-					);
-			return codeMatcher.InstructionEnumeration();
+					)
+				.InstructionEnumeration();
 		}
 	}
 
