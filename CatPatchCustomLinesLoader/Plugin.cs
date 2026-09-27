@@ -5,19 +5,19 @@ using HarmonyLib;
 
 namespace CatPatchCustomLinesLoader;
 
-[BepInPlugin(ModGUID, ModName, ModVersion)]
+[BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 [BepInDependency("meow.catpatch")]
 public class Plugin : BaseUnityPlugin
 {
-	public const string ModGUID = "meowharder.catpatch.customlinesloader";
-	public const string ModName = "CatPatchCustomLinesLoader";
-	public const string ModVersion = "1.0.1";
+	public const string ModGuid = MyPluginInfo.PLUGIN_GUID;
+	public const string ModName = MyPluginInfo.PLUGIN_NAME;
+	public const string ModVersion = MyPluginInfo.PLUGIN_VERSION;
 	
 	public static Plugin Instance { get; private set; } = null!;
 
 	internal static new ManualLogSource Logger;
 
-	private readonly Harmony _harmony = new(ModGUID);
+	private readonly Harmony _harmony = new(ModGuid);
 	
 	private ConfigEntry<bool> configFilterIncomingLines;
 	

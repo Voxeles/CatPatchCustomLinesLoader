@@ -1,9 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
+    <BepInExPluginGuid>meowharder.catpatch.customlinesloader</BepInExPluginGuid>
+    <ProjectName>CatPatchCustomLinesLoader</ProjectName>
+    <Version>1.0.1</Version>
     <AssemblyName>$(ProjectName)</AssemblyName>
     <Product>$(ProjectName)</Product>
-    <Version>1.0.1</Version>
+    <BepInExPluginName>$(ProjectName)</BepInExPluginName>
+    <BepInExPluginVersion>$(Version)</BepInExPluginVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RestoreAdditionalProjectSources>
