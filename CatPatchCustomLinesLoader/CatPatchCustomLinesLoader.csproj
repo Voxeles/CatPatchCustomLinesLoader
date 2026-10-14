@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <BepInExPluginGuid>meowharder.catpatch.customlinesloader</BepInExPluginGuid>
     <ProjectName>CatPatchCustomLinesLoader</ProjectName>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
     <AssemblyName>$(ProjectName)</AssemblyName>
     <Product>$(ProjectName)</Product>
     <BepInExPluginName>$(ProjectName)</BepInExPluginName>
@@ -50,13 +50,9 @@
       <HintPath>$(BepInExDir)/plugins/CatPatch/CatPatch.dll</HintPath>
     </Reference>
 
-    <Reference Include="KrokoshaCasualtiesMP">
-      <HintPath>$(BepInExDir)/plugins/KrokMP/KrokoshaCasualtiesMP.dll</HintPath>
+    <Reference Include="CasualtiesMP">
+      <HintPath>$(BepInExDir)/plugins/Together/CasualtiesMP.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
   </ItemGroup>
 
   <PropertyGroup>

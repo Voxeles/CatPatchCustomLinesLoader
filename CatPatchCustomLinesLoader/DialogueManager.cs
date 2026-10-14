@@ -6,7 +6,7 @@ using BepInEx;
 using CatPatchspace;
 using HarmonyLib;
 using JetBrains.Annotations;
-using KrokoshaCasualtiesMP;
+using Together;
 using Newtonsoft.Json;
 using Random = UnityEngine.Random;
 
@@ -123,7 +123,7 @@ public static class DialogueManager
             ?? ChooseLineIf(data.DirtyHugLines, () => receiverBody.dirtyness >= 75.0f)
             ?? ChooseLineIf(data.OverweightHugLines, () => receiverBody.weightOffset > 15.0f)
             ?? ChooseLineIf(data.CheerfulHugLines, () => speakerBody.totalHappiness >= 40.0f)
-            ?? ChooseLineIf(data.HostHugLines, () => NetPlayer.GetNetPlayerFromBody(receiverBody)?.is_host == true)
+            ?? ChooseLineIf(data.HostHugLines, () => ScavPlayer.GetPlayerFromBody(receiverBody)?.IsHost == true)
             ?? ChooseLine(data.NeutralHugLines);
     }
 
@@ -131,8 +131,8 @@ public static class DialogueManager
     {
         if (Plugin.ShouldFilterIncomingLines && !linesSet.Contains(line))
         {
-            NetPlayer.TryGetNetPlayerAndBodyFromClientId(speakerClientId, out _, out var speakerBody);
-            NetPlayer.TryGetNetPlayerAndBodyFromClientId(receiverClientId, out _, out var receiverBody);
+            ScavPlayer.TryGetPlayerAndBodyFromClientId(speakerClientId, out _, out var speakerBody);
+            ScavPlayer.TryGetPlayerAndBodyFromClientId(receiverClientId, out _, out var receiverBody);
             line = ChooseHugLine(speakerBody, receiverBody);
         }
         HugNetworkController._instance._talkerCatPatch.PlayHugAcceptedLine(speakerClientId, line);
@@ -141,8 +141,8 @@ public static class DialogueManager
     public static string ChooseKissLine(knetid speakerClientId, knetid receiverClientId)
     {
         LoadLines();
-        NetPlayer.TryGetNetPlayerAndBodyFromClientId(speakerClientId, out _, out var speakerBody);
-        NetPlayer.TryGetNetPlayerAndBodyFromClientId(receiverClientId, out _, out var receiverBody);
+        ScavPlayer.TryGetPlayerAndBodyFromClientId(speakerClientId, out _, out var speakerBody);
+        ScavPlayer.TryGetPlayerAndBodyFromClientId(receiverClientId, out _, out var receiverBody);
         if (speakerBody == null || receiverBody == null)
             return ChooseLine(data.KissLines);
         return
